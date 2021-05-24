@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.js"></script>
+</head>
+<body>
+    <div id="app">
+        <table border="1" cellpadding="10" cellspacing="0">
+            <thead>
+                <th width="100"><input type="checkbox" @click="checkAll($event)" ></th>
+                <th width="100">名称</th>
+                <th width="100">价格</th>
+                <th width="100">数量</th>
+                <th>总价</th>
+            </thead>
+            <tr v-for="(item,index) in proList">
+                <td><input type="checkbox" @click="selectPro(item,$event)" :checked="item.checked" ></td>
+                <td>{{ item.pName }}</td>
+                <td>
+                    <a style="text-decoration: none;" href="javascript:void(0)" @click="changeNum(item,-1)">-</a>
+                    <input class="checkItem" style="width: 100px;" type="text" readonly v-model="item.pNum">
+                    <a style="text-decoration: none;" href="javascript:void(0)" @click="changeNum(item,1)">+</a>
+                </td>
+                <td>{{ item.pPrice }}</td>
+                <td>{{ item.pPrice*item.pNum }}</td>
+            </tr>
+            <tr>
+                <td colspan="5">总计：{{ totalPrice }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data:{
+                proList: [],
+                checkDate: [],
+                totalPrice: 0
+            },
+            mounted () {
+                var _this = this;
+                axios.get("static/prolist.json").then(function(res){
+                    _this.proList = res.data.proList;
+                })
+            },
+            methods: {
+                checkAll:function(e){ //全选
+                    var checkObj = document.querySelectorAll(".checkItem");
+                    for(var i=0;i<checkObj.length;i++){
+                        checkObj[i].checked = e.target.checked;
+                    } 
+                    this.proList.forEach(function(item,index){
+                        item.checked = e.target.checked;
+                    })
+                    this.calcTotalPrice();
+                },
+                calcTotalPrice(){ //计算总价
+                    var _this = this;
+                    this.totalPrice = 0;
+                    this.proList.forEach(function(item,index){
+                        if(item.checked){
+                            _this.totalPrice += item.pPrice * item.pNum;
+                        }
+                    })
+                },
+                changeNum(item,tag){ //数量加减
+                    if (tag>0) {
+                        item.pNum++;
+                    } else {
+                        item.pNum--;
+                        if (item.pNum < 0) {
+                            item.pNum = 0
+                        }
+                    }
+                    this.calcTotalPrice();
+                },
+                selectPro(item,e){ //选择单个商品
+                    item.checked = e.target.checked;
+                    this.calcTotalPrice();
+                }
+            }
+        })
+    </script>
+</body>
+</html>

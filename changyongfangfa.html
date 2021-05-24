@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常用方法</title>
+</head>
+<body>
+    <div id="app">
+        <div ref="title">{{ msg }}</div>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            //el: "#app",
+            data: {
+                msg: "hello vue"
+            }
+        }).$mount("app")
+
+        //销毁Vue对象
+        //vm.$destroy("app");
+
+    </script>
+</body>
+</html>

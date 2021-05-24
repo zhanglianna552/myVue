@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>兄弟组件数据传递</title>
+    <script src="js/vue.js"></script>
+    <!-- 
+        
+
+     -->
+</head>
+<body>
+    <div id="app">
+        <components1></components1>
+        <components2></components2>
+    </div>
+
+    <template id="t1">
+        <div>
+            我是components1 {{ attr2 }}
+        </div>
+    </template>
+
+    <template id="t2">
+        <div>
+            我是components2
+
+            <button @click="send">将components2的数据传递给components1</button>
+        </div>
+    </template>
+
+    <script>
+        var event = new Vue({ })
+        var vm = new Vue({
+            el: "#app",
+            data:{
+
+            },
+            components: {
+                "components1":{
+                    template: "#t1",
+                    data () {
+                        return {
+                            attr1: "我是components1数据",
+                            attr2: ""
+                        }
+                    },
+                    mounted () {
+                        event.$on("word",attr2=>{
+                            this.attr2 = attr2;
+                        })
+                        // event.$on("word",function(attr2){
+                        //     this.attr2 = attr2;
+                        // })
+                    }
+                },
+                "components2":{
+                    template: "#t2",
+                    data () {
+                        return {
+                            attr2: "我是components2数据"
+                        }
+                    },
+                    methods: {
+                        send(){
+                            event.$emit("word",this.attr2)
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

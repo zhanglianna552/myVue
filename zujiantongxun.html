@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件数据通讯</title>
+    <script src="js/vue.js"></script>
+    <!-- 
+        组件数据通讯
+
+        tip1：组件默认情况下只能调用自己的属性和方法
+
+        tip2：子组件只能在父组件里面使用
+
+        子组件调用父组件：props
+        1、父组件内用子组件的名字--发送请求，绑定父组件的变量
+        2、子组件内用props说明
+
+        父组件调用子组件
+        1、通过子组件对象，调用emit方法，触发一个自定义事件，发送数据
+        2、父组件内通过自定义事件调用，把数据赋值给变量
+        3、在父组件内直接调用
+     -->
+</head>
+<body>
+    <div id="app">
+        <father></father>
+    </div>
+
+    
+    <template id="t1">
+        <div>
+            父组件 {{ attr1 }}     
+            父调子 {{ attr2 }}
+            <son :attr1="attr1" :attr3="attr3" @word="getData"></son>
+        </div>
+    </template>
+
+
+    <template id="t2">
+        <div>
+            子组件 {{ attr2 }}
+            <br/>
+            子调父 {{ attr1 }}--{{attr3}}
+
+            <button @click="send">将子组件数据传给父组件</button>
+        </div>
+    </template>
+
+    <script>
+
+        var vm = new Vue({
+            el: "#app",
+            data:{
+
+            },
+            components: {
+                "father":{
+                    template: "#t1",
+                    data(){
+                        return{
+                            attr1: "我是父组件数据",
+                            attr3: "我是父组件数据333",
+                            attr2: ""
+                        }
+                    },
+                    methods: {
+                      getData(attr2){
+                        this.attr2 = attr2;
+                      }  
+                    },
+                    components: {
+                        "son":{
+                            template: "#t2",
+                            data(){
+                                return{
+                                    attr2: "我是子组件数据"                                    
+                                }
+                            },
+                            props: ["attr1","attr3"],
+                            methods: {
+                                send(){
+                                    //通过子组件对象，调用emit方法，触发一个自定义事件word，发送数据
+                                    this.$emit("word", this.attr2)
+                                }
+                            },
+                            mounted () {
+                                this.$emit("word", this.attr2) 
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue生命周期</title>
+    <script src="js/vue.js"></script>
+    <!-- 钩子函数
+        beforeCreate
+        created
+        beforeMount
+        Mounted
+        beforeUpdate
+        Updated
+        beforeDestroy
+        destroyed
+     -->
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="msg">
+        <input type="button" value="销毁对象" @click="kill">
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                msg: "修改试试"
+            },
+            beforeCreate () {
+              console.log("小明在妈妈肚子里");  
+            },
+            created () {
+              console.log("小明出生，有自己的属性和方法");  
+            },
+            beforeMount () {
+                console.log("小明恋爱");
+            },
+            mounted () {
+              console.log("小明结婚")  
+            },
+            beforeUpdate () {
+               console.log("结婚磨合,试图改变对方的属性和行为"); 
+            },
+            updated () {
+              console.log("磨合完成");  
+            },
+            beforeDestroy () {
+              console.log("小明老了生病了");  
+            },
+            destroyed () {
+              console.log("小明死掉");  
+            },
+            methods: {
+                kill(){
+                    this.$destroy()
+                }
+            }
+        })
+    </script>
+</body>
+</html>

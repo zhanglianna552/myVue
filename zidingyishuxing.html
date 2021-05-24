@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义指令</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="msg">
+        <div v-demo>dddddddddd<br/>{{ msg }}</div>
+    </div>
+
+    <script>
+        // 自定义指令
+        Vue.directive("demo", {
+            bind(el,binding){ //将指令绑定到元素 
+                //el：指令绑定的对象
+                //binding：指令包含的参数
+                el.style.color = "#f00";
+                console.log(binding);
+            },
+            inserted(){ //被绑定自定义指令的元素插入到其父节点时调用
+                console.log("被绑定自定义指令的元素插入到其父节点时调用");
+            },
+            update () { //被绑定自定义指令的元素里面的值更新时调用
+                console.log("被绑定自定义指令的元素里面的值更新时调用");
+            },
+            unbind(){ //指令没绑定时调用
+                console.log("");
+            }
+        })
+
+        //表示调用bind、update
+        vue.directive("demo",function(el,binding){
+
+        })
+
+        var vm = new Vue({
+            el: "#app",
+            data:{
+                msg: "hello vue"
+            }
+        })
+    </script>
+</body>
+</html>

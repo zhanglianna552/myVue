@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算属性</title>
+    <script src="js/vue.js"></script>
+    <!-- 
+        计算属性和方法的区别
+
+        1、计算属性只能对属性进行业务逻辑操作，方法可以对任何东西进行操作
+        2、计算属性会缓存值
+     -->
+</head>
+<body>
+    <div id="app">
+        {{ msg2 }}
+        {{ add() }}
+
+        {{ changeNum() }}
+        <div>{{ num2 }}</div>
+
+        <button @click="fn1">看两者不同</button>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data:{
+                msg: "hello vue hi haha",
+                num: 9
+            },
+            methods: {
+                add(){
+                    return this.msg.split(" ").reverse().join("-")
+                },
+
+                changeNum(){
+                    console.log(new Date());
+                    return this.num-1;
+                }
+            },
+            computed: {
+                msg2:function(){
+                    return this.msg.split(" ").reverse().join("-")
+                },
+
+                num2:function(){
+                    console.log(new Date());
+                    return this.num-1;
+                }
+            },
+        })
+
+        function fn1(){
+            setInterval(() => {
+                console.log(vm.num2);
+                console.log(vm.changeNum());
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
